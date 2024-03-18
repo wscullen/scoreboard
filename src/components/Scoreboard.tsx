@@ -1,14 +1,22 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
+
+import BluetoothControlPanel from "./BluetoothControlPanel";
 
 const ScoreCounter = () => {
   const [leftScore, setLeftScore] = useState(0);
   const [rightScore, setRightScore] = useState(0);
+
+  const updateScores = useCallback((leftScore: number, rightScore: number) => {
+    setLeftScore(leftScore);
+    setRightScore(rightScore);
+  }, []);
 
   const incrementLeftScore = () => {
     setLeftScore(leftScore + 1);
   };
 
   const decrementLeftScore = () => {
+    if (leftScore === 0) return;
     setLeftScore(leftScore - 1);
   };
 
@@ -17,11 +25,23 @@ const ScoreCounter = () => {
   };
 
   const decrementRightScore = () => {
+    if (rightScore === 0) return;
     setRightScore(rightScore - 1);
   };
 
+  const resetScores = useCallback(() => {
+    setLeftScore(0);
+    setRightScore(0);
+  }, []);
+
+  console.log(leftScore, rightScore);
+
   return (
     <div className="flex flex-row grow h-full">
+      <BluetoothControlPanel
+        handleResetScores={resetScores}
+        handleUpdateScores={updateScores}
+      />
       <div className="flex flex-col grow items-center text-9xl font-bold max-w-[50%]">
         <button className="flex items-center z-10" onClick={incrementLeftScore}>
           +
