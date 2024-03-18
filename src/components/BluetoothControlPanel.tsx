@@ -37,7 +37,6 @@ const BluetoothControlPanel = ({
     supportsBluetooth,
     isDisconnected,
     connectToNewDeviceAndSubscribeToUpdates,
-    sendData,
     previouslyPairedDevices,
     clearPairedDevices,
   } = useWebBluetooth(handleIncomingData);

@@ -120,7 +120,7 @@ const useWebBluetooth = (incomingDataEventListener: (data: string) => void) => {
   /**
    * Let the user know when their device has been disconnected.
    */
-  const onDisconnected = useCallback((event: Event) => {
+  const onDisconnected = useCallback(() => {
     console.log("disconnected event recieved");
     // alert(`The device ${event.target} is disconnected`);
     setIsDisconnected(true);
