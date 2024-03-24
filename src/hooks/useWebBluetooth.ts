@@ -73,9 +73,10 @@ const useWebBluetooth = (incomingDataEventListener: (data: string) => void) => {
   };
 
   useEffect(() => {
-    let reconnect: number;
+    let reconnect: number | undefined = undefined;
     if (previouslyPairedDevices.length > 0) {
       reconnect = setInterval(() => {
+        console.log(isDisconnected);
         if (!isDisconnected) {
           clearInterval(reconnect);
           return;
@@ -83,10 +84,12 @@ const useWebBluetooth = (incomingDataEventListener: (data: string) => void) => {
         const device = previouslyPairedDevices[0];
         connectToExistingDevice(device);
       }, 5000);
+    } else {
+      if (reconnect !== undefined) clearInterval(reconnect);
     }
 
     return () => {
-      clearInterval(reconnect);
+      if (reconnect !== undefined) clearInterval(reconnect);
     };
   }, [previouslyPairedDevices, isDisconnected]);
 
@@ -165,7 +168,6 @@ const useWebBluetooth = (incomingDataEventListener: (data: string) => void) => {
   const connectToExistingDevice = async (device: BluetoothDevice) => {
     try {
       console.log("trying to connect to existing device", device);
-      setIsDisconnected(false);
       currentDevice.current = device;
 
       // Add an event listener to detect when a device disconnects
@@ -187,7 +189,8 @@ const useWebBluetooth = (incomingDataEventListener: (data: string) => void) => {
         "characteristicvaluechanged",
         handleCharacteristicValueChanged
       );
-    } catch (error) {
+      setIsDisconnected(false);
+    } catch (error: unknown) {
       console.log(`There was an error: ${error}`);
     }
   };
