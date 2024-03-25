@@ -168,6 +168,11 @@ const useWebBluetooth = (incomingDataEventListener: (data: string) => void) => {
   const connectToExistingDevice = async (device: BluetoothDevice) => {
     try {
       console.log("trying to connect to existing device", device);
+
+      // Need to do this to prevent Chrome "forgetting" the device and throwing
+      // device out of range error
+      await device?.watchAdvertisements();
+
       currentDevice.current = device;
 
       // Add an event listener to detect when a device disconnects
