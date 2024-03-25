@@ -71,7 +71,7 @@ const BluetoothControlPanel = ({
           <div className="flex flex-col gap-y-2">
             {supportsBluetooth ? (
               <div className="flex flex-col gap-y-2">
-                {isDisconnected && previouslyPairedDevices.length === 0 && (
+                {isDisconnected && (
                   <button
                     className="p-2 border rounded border-solid border-gray-700"
                     onClick={connectToNewDeviceAndSubscribeToUpdates}
