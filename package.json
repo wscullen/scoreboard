@@ -11,6 +11,7 @@
     "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/icon.png"
   },
   "dependencies": {
+    "@tailwindcss/container-queries": "^0.1.1",
     "@types/web-bluetooth": "^0.0.20",
     "class-variance-authority": "^0.7.0",
     "lucide-react": "^0.358.0",

@@ -62,13 +62,18 @@ const BluetoothControlPanel = ({
   }, [supportsBluetooth, isDisconnected, previouslyPairedDevices]);
 
   return (
-    <div className="top-4 left-4 fixed flex flex-col gap-2 items-center justify-center">
-      <div className="p-2 flex flex-row gap-x-2 grow border rounded border-solid border-gray-700 items-start">
-        <button className=" text-gray-700 border-none" onClick={toggleMenu}>
+    <div className="top-4 left-4 fixed flex flex-col gap-2 items-center justify-center z-10">
+      <div
+        className={`flex flex-row grow border rounded border-solid border-gray-700 items-start`}
+      >
+        <button
+          className={`text-gray-700 border-none p-2`}
+          onClick={toggleMenu}
+        >
           <Settings2 size={24} />
         </button>
         {menuOpen && (
-          <div className="flex flex-col gap-y-2">
+          <div className="flex flex-col gap-y-2 m-2">
             {supportsBluetooth ? (
               <div className="flex flex-col gap-y-2">
                 {isDisconnected && (

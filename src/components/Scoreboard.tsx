@@ -37,30 +37,30 @@ const ScoreCounter = () => {
   console.log(leftScore, rightScore);
 
   return (
-    <div className="flex flex-row grow h-full">
+    <div className="@2xl/main:flex-row flex flex-col grow h-full">
       <BluetoothControlPanel
         handleResetScores={resetScores}
         handleUpdateScores={updateScores}
       />
-      <div className="flex flex-col grow items-center text-9xl font-bold max-w-[50%]">
+      <div className="@container text-4xl flex flex-col grow items-center font-bold">
         <button className="flex items-center z-10" onClick={incrementLeftScore}>
           +
         </button>
-        <div className="flex grow items-center text-superxl leading-[0.65] mb-28">
+        <div className="text-supersm @4xl:text-superxl @4xl:mb-20 @3xl:text-superlg @3xl:mb-12 @2xl:text-supermd flex grow items-center leading-[0.65]">
           {leftScore}
         </div>
         <button className="flex items-center" onClick={decrementLeftScore}>
           -
         </button>
       </div>
-      <div className="flex flex-col grow items-center text-9xl font-bold bg-red-600 text-white max-w-[50%]">
+      <div className="@container text-3xl flex flex-col grow items-center font-bold bg-red-600 text-white">
         <button
           className="flex items-center z-10"
           onClick={incrementRightScore}
         >
           +
         </button>
-        <div className="flex grow items-center text-superxl leading-[0.65] mb-28">
+        <div className="text-supersm @4xl:text-superxl @4xl:mb-20 @3xl:text-superlg @3xl:mb-12 @2xl:text-supermd flex grow items-center leading-[0.65]">
           {rightScore}
         </div>
         <button
