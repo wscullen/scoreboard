@@ -1,10 +1,14 @@
 import { useCallback, useState } from "react";
 
 import BluetoothControlPanel from "./BluetoothControlPanel";
+import GoalDialog from "./GoalDialog";
+import { useKeyDown } from "../hooks/useKeyDown";
 
 const ScoreCounter = () => {
   const [leftScore, setLeftScore] = useState(0);
   const [rightScore, setRightScore] = useState(0);
+
+  const [goalDialogOpen, setGoalDialogOpen] = useState(false);
 
   const updateScores = useCallback((leftScore: number, rightScore: number) => {
     setLeftScore(leftScore);
@@ -13,6 +17,10 @@ const ScoreCounter = () => {
 
   const incrementLeftScore = () => {
     setLeftScore(leftScore + 1);
+    setGoalDialogOpen(true);
+    setTimeout(() => {
+      setGoalDialogOpen(false);
+    }, 15000);
   };
 
   const decrementLeftScore = () => {
@@ -22,6 +30,10 @@ const ScoreCounter = () => {
 
   const incrementRightScore = () => {
     setRightScore(rightScore + 1);
+    setGoalDialogOpen(true);
+    setTimeout(() => {
+      setGoalDialogOpen(false);
+    }, 15000);
   };
 
   const decrementRightScore = () => {
@@ -34,7 +46,32 @@ const ScoreCounter = () => {
     setRightScore(0);
   }, []);
 
-  console.log(leftScore, rightScore);
+  const handleKeyPress = useCallback(
+    (e: KeyboardEvent) => {
+      console.log(e);
+      if (e.key === "z") {
+        decrementLeftScore();
+      } else if (e.key === "x") {
+        incrementLeftScore();
+      } else if (e.key === ",") {
+        decrementRightScore();
+      } else if (e.key === ".") {
+        incrementRightScore();
+      } else if (e.ctrlKey && e.key === "1") {
+        setLeftScore(0);
+      } else if (e.ctrlKey && e.key === "2") {
+        setRightScore(1);
+      }
+    },
+    [
+      decrementLeftScore,
+      incrementLeftScore,
+      decrementRightScore,
+      incrementRightScore,
+    ]
+  );
+
+  useKeyDown(handleKeyPress, ["z", "x", ",", ".", "1", "2"]);
 
   return (
     <div className="@2xl/main:flex-row flex flex-col grow h-full">
@@ -42,6 +79,7 @@ const ScoreCounter = () => {
         handleResetScores={resetScores}
         handleUpdateScores={updateScores}
       />
+      {goalDialogOpen && <GoalDialog />}
       <div className="@container text-4xl flex flex-col grow items-center font-bold">
         <button className="flex items-center z-10" onClick={incrementLeftScore}>
           +

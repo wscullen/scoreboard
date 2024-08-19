@@ -73,7 +73,7 @@ const useWebBluetooth = (incomingDataEventListener: (data: string) => void) => {
   };
 
   useEffect(() => {
-    let reconnect: number | undefined = undefined;
+    let reconnect: number | NodeJS.Timeout | undefined = undefined;
     if (previouslyPairedDevices.length > 0) {
       reconnect = setInterval(() => {
         console.log(isDisconnected);
