@@ -1,0 +1,47 @@
+.goal span {
+    display: inline-block;
+}
+
+.goal span:nth-child(1) {
+    animation: balance 1.5s linear infinite;
+    transform-origin: bottom left;
+}
+
+.goal span:nth-child(2) {
+    animation: balance 1.5s linear infinite;
+    transform-origin: bottom left;
+    animation-delay: 0.2s;
+
+}
+.goal span:nth-child(3) {
+    animation: balance 1.5s linear infinite;
+    transform-origin: bottom left;
+    animation-delay: 0.4s;
+
+}
+.goal span:nth-child(4) {
+    animation: balance 1.5s linear infinite;
+    transform-origin: bottom left;
+    animation-delay: 0.6s;
+
+}
+.goal span:nth-child(5) {
+    animation: balance 1.5s linear infinite;
+    transform-origin: bottom left;
+    animation-delay: 0.8s;
+}
+
+  
+@keyframes balance {
+    0%, 50%, 100% {
+        transform: translateY(0);
+    }
+
+    25% {
+        transform: translateY(-100px);
+    }
+
+    75% {
+        transform: translateY(100px);
+    }
+}

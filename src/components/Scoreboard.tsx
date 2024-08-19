@@ -1,14 +1,15 @@
 import { useCallback, useState } from "react";
 
 import BluetoothControlPanel from "./BluetoothControlPanel";
-import GoalDialog from "./GoalDialog";
+import GoalDialog from "./GoalDialog/GoalDialog";
 import { useKeyDown } from "../hooks/useKeyDown";
+import { Team } from "../utils/enums";
 
 const ScoreCounter = () => {
   const [leftScore, setLeftScore] = useState(0);
   const [rightScore, setRightScore] = useState(0);
 
-  const [goalDialogOpen, setGoalDialogOpen] = useState(false);
+  const [goalDialogOpen, setGoalDialogOpen] = useState<Team | undefined>();
 
   const updateScores = useCallback((leftScore: number, rightScore: number) => {
     setLeftScore(leftScore);
@@ -17,9 +18,9 @@ const ScoreCounter = () => {
 
   const incrementLeftScore = () => {
     setLeftScore(leftScore + 1);
-    setGoalDialogOpen(true);
+    setGoalDialogOpen(Team.Left);
     setTimeout(() => {
-      setGoalDialogOpen(false);
+      setGoalDialogOpen(undefined);
     }, 15000);
   };
 
@@ -30,9 +31,9 @@ const ScoreCounter = () => {
 
   const incrementRightScore = () => {
     setRightScore(rightScore + 1);
-    setGoalDialogOpen(true);
+    setGoalDialogOpen(Team.Right);
     setTimeout(() => {
-      setGoalDialogOpen(false);
+      setGoalDialogOpen(undefined);
     }, 15000);
   };
 
@@ -79,7 +80,7 @@ const ScoreCounter = () => {
         handleResetScores={resetScores}
         handleUpdateScores={updateScores}
       />
-      {goalDialogOpen && <GoalDialog />}
+      {goalDialogOpen && <GoalDialog team={goalDialogOpen} />}
       <div className="@container text-4xl flex flex-col grow items-center font-bold">
         <button className="flex items-center z-10" onClick={incrementLeftScore}>
           +

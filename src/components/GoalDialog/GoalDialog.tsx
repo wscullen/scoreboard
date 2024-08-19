@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
 
+import { Team } from "../../utils/enums";
+
+import "./GoalDialog.css";
+
 const musicUrls = [
   "/scoreboard/music/Kernkraft400-ZombieNation-Sample.mp3",
   "/scoreboard/music/AlienAntFarm-SmoothCriminal-Sample.mp3",
@@ -10,7 +14,11 @@ const musicUrls = [
   "/scoreboard/music/Psy-GangdamStyle-Sample.mp3",
 ];
 
-const GoalDialog = () => {
+interface Props {
+  team: Team;
+}
+
+const GoalDialog = ({ team }: Props) => {
   const [showGoalDialog, setShowGoalDialog] = useState(false);
   const [musicUrl, setMusicUrl] = useState<string>();
 
@@ -28,14 +36,30 @@ const GoalDialog = () => {
     }, 1000);
   }, []);
 
+  console.log(team);
+
   return (
     <>
       <div
         className={`${
           showGoalDialog ? "visible" : "hidden"
-        } h-full w-full absolute z-10 bg-white font-extrabold content-center items-center`}
+        } h-full w-full absolute z-10 font-extrabold content-center items-center ${
+          team === Team.Right ? "bg-red-600" : "bg-white"
+        }`}
       >
-        <h1 className="text-superxl">GOAL!</h1>
+        <h1
+          className={`text-superxl ${
+            team === Team.Right ? "text-white" : "text-black"
+          }`}
+        >
+          <div className="goal">
+            <span>G</span>
+            <span>O</span>
+            <span>A</span>
+            <span>L</span>
+            <span>!</span>
+          </div>
+        </h1>
       </div>
       {musicUrl && (
         <audio id="musicplayer" autoPlay>
