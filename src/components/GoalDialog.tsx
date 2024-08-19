@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 
 const musicUrls = [
-  "http://localhost:5173/scoreboard/music/Kernkraft400-ZombieNation-Sample.mp3",
-  "http://localhost:5173/scoreboard/music/AlienAntFarm-SmoothCriminal-Sample.mp3",
-  "http://localhost:5173/scoreboard/music/BloodhoundGang-TheBadTouch-Sample.mp3",
-  "http://localhost:5173/scoreboard/music/Blur-Song2-Sample.mp3",
-  "http://localhost:5173/scoreboard/music/Darude-Sandstorm-Sample.mp3",
-  "http://localhost:5173/scoreboard/music/LittleBig-Skibidi-Sample.mp3",
-  "http://localhost:5173/scoreboard/music/Psy-GangdamStyle-Sample.mp3",
+  "/scoreboard/music/Kernkraft400-ZombieNation-Sample.mp3",
+  "/scoreboard/music/AlienAntFarm-SmoothCriminal-Sample.mp3",
+  "/scoreboard/music/BloodhoundGang-TheBadTouch-Sample.mp3",
+  "/scoreboard/music/Blur-Song2-Sample.mp3",
+  "/scoreboard/music/Darude-Sandstorm-Sample.mp3",
+  "/scoreboard/music/LittleBig-Skibidi-Sample.mp3",
+  "/scoreboard/music/Psy-GangdamStyle-Sample.mp3",
 ];
 
 const GoalDialog = () => {
