@@ -45,21 +45,19 @@ const GoalDialog = ({ team }: Props) => {
           showGoalDialog ? "visible" : "hidden"
         } h-full w-full absolute z-10 font-extrabold content-center items-center ${
           team === Team.Right ? "bg-red-600" : "bg-white"
-        }`}
+        } flex justify-around`}
       >
-        <h1
-          className={`text-superxl ${
+        <div
+          className={`text-superlg ${
             team === Team.Right ? "text-white" : "text-black"
-          }`}
+          } goal width-fit-content`}
         >
-          <div className="goal">
-            <span>G</span>
-            <span>O</span>
-            <span>A</span>
-            <span>L</span>
-            <span>!</span>
-          </div>
-        </h1>
+          <span>G</span>
+          <span>O</span>
+          <span>A</span>
+          <span>L</span>
+          <span>!</span>
+        </div>
       </div>
       {musicUrl && (
         <audio id="musicplayer" autoPlay>

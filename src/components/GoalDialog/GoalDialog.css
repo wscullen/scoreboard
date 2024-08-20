@@ -2,6 +2,10 @@
     display: inline-block;
 }
 
+.goal {
+    width: fit-content;
+}
+
 .goal span:nth-child(1) {
     animation: balance 1.5s linear infinite;
     transform-origin: bottom left;
