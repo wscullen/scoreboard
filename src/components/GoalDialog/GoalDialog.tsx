@@ -21,15 +21,6 @@ interface Props {
   teamColor: TeamColor;
 }
 
-// GoalDialog.tsx:31 6
-// GoalDialog.tsx:32 6
-// GoalDialog.tsx:31 10
-// GoalDialog.tsx:32 4
-// GoalDialog.tsx:31 4
-// GoalDialog.tsx:32 5
-// GoalDialog.tsx:31 5
-// GoalDialog.tsx:32 4
-
 const GoalDialog = ({ teamColor }: Props) => {
   const [musicUrl, setMusicUrl] = useState<string>();
 
