@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 
 import "./GoalDialog.css";
 import { TeamColor } from "../Scoreboard";
 
 import { rampAudioUpAndDown } from "../../utils/audioRamping";
+import { SettingsContext } from "../SettingsProvider";
 
 const musicUrls = [
   "/scoreboard/music/Kernkraft400-ZombieNation-Sample.mp3",
@@ -28,10 +29,11 @@ const GoalDialog = ({ teamColor, duration }: Props) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [musicUrl, setMusicUrl] = useState<string>();
 
+  const { settings } = useContext(SettingsContext);
+
   useEffect(() => {
     let abort = false;
     const lastSampleIndex = localStorage.getItem("lastSampleIndex");
-    const enableMusic = localStorage.getItem("enableSound") === "true";
     let sampleIndex = Math.floor(Math.random() * musicUrls.length);
 
     if (lastSampleIndex) {
@@ -41,13 +43,12 @@ const GoalDialog = ({ teamColor, duration }: Props) => {
     }
 
     const url = musicUrls[sampleIndex];
-    if (enableMusic) setMusicUrl(url);
+    if (settings.enableSound) setMusicUrl(url);
 
     setTimeout(() => {
       if (!abort) {
         localStorage.setItem("lastSampleIndex", String(sampleIndex));
         if (audioRef.current) {
-          console.log("ramping volume");
           audioRef.current.volume = 0;
           rampAudioUpAndDown(audioRef, duration);
         }
@@ -57,7 +58,7 @@ const GoalDialog = ({ teamColor, duration }: Props) => {
     return () => {
       abort = true;
     };
-  }, [duration]);
+  }, [duration, settings.enableSound]);
 
   return (
     <>
