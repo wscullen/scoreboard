@@ -157,6 +157,7 @@ const ScoreCounter = () => {
           teamColor={
             goalDialogOpen === Team.Left ? leftTeamColor : rightTeamColor
           }
+          duration={settings.overlayDuration}
         />
       )}
       <div

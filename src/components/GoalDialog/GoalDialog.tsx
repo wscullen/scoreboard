@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import "./GoalDialog.css";
 import { TeamColor } from "../Scoreboard";
+
+import { rampAudioUpAndDown } from "../../utils/audioRamping";
 
 const musicUrls = [
   "/scoreboard/music/Kernkraft400-ZombieNation-Sample.mp3",
@@ -19,9 +21,11 @@ const musicUrls = [
 
 interface Props {
   teamColor: TeamColor;
+  duration: number;
 }
 
-const GoalDialog = ({ teamColor }: Props) => {
+const GoalDialog = ({ teamColor, duration }: Props) => {
+  const audioRef = useRef<HTMLAudioElement>(null);
   const [musicUrl, setMusicUrl] = useState<string>();
 
   useEffect(() => {
@@ -29,27 +33,31 @@ const GoalDialog = ({ teamColor }: Props) => {
     const lastSampleIndex = localStorage.getItem("lastSampleIndex");
     const enableMusic = localStorage.getItem("enableSound") === "true";
     let sampleIndex = Math.floor(Math.random() * musicUrls.length);
-    console.log(lastSampleIndex);
-    console.log(sampleIndex);
+
     if (lastSampleIndex) {
       while (sampleIndex === Number(lastSampleIndex)) {
         sampleIndex = Math.floor(Math.random() * musicUrls.length);
       }
     }
-    const url = musicUrls[sampleIndex];
 
+    const url = musicUrls[sampleIndex];
     if (enableMusic) setMusicUrl(url);
 
     setTimeout(() => {
       if (!abort) {
         localStorage.setItem("lastSampleIndex", String(sampleIndex));
+        if (audioRef.current) {
+          console.log("ramping volume");
+          audioRef.current.volume = 0;
+          rampAudioUpAndDown(audioRef, duration);
+        }
       }
-    }, 100);
+    }, 10);
 
     return () => {
       abort = true;
     };
-  }, []);
+  }, [duration]);
 
   return (
     <>
@@ -67,7 +75,7 @@ const GoalDialog = ({ teamColor }: Props) => {
         </div>
       </div>
       {musicUrl && (
-        <audio id="musicplayer" autoPlay>
+        <audio ref={audioRef} id="musicplayer" autoPlay>
           <source src={musicUrl} />
         </audio>
       )}
