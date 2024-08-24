@@ -7,32 +7,31 @@
 }
 
 .goal span:nth-child(1) {
-    animation: balance 1.5s linear infinite;
+    animation: balance 1s linear infinite;
     transform-origin: bottom left;
 }
 
 .goal span:nth-child(2) {
-    animation: balance 1.5s linear infinite;
+    animation: balance 1s linear infinite;
+    transform-origin: bottom left;
+    animation-delay: 0.1s;
+
+}
+.goal span:nth-child(3) {
+    animation: balance 1s linear infinite;
     transform-origin: bottom left;
     animation-delay: 0.2s;
 
 }
-.goal span:nth-child(3) {
-    animation: balance 1.5s linear infinite;
-    transform-origin: bottom left;
-    animation-delay: 0.4s;
-
-}
 .goal span:nth-child(4) {
-    animation: balance 1.5s linear infinite;
+    animation: balance 1s linear infinite;
     transform-origin: bottom left;
-    animation-delay: 0.6s;
-
+    animation-delay: 0.3s
 }
 .goal span:nth-child(5) {
-    animation: balance 1.5s linear infinite;
+    animation: balance 1s linear infinite;
     transform-origin: bottom left;
-    animation-delay: 0.8s;
+    animation-delay: 0.4s;
 }
 
   

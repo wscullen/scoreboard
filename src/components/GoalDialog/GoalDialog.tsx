@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 
-import { Team } from "../../utils/enums";
-
 import "./GoalDialog.css";
+import { TeamColor } from "../Scoreboard";
 
 const musicUrls = [
   "/scoreboard/music/Kernkraft400-ZombieNation-Sample.mp3",
@@ -12,45 +11,62 @@ const musicUrls = [
   "/scoreboard/music/Darude-Sandstorm-Sample.mp3",
   "/scoreboard/music/LittleBig-Skibidi-Sample.mp3",
   "/scoreboard/music/Psy-GangdamStyle-Sample.mp3",
+  "/scoreboard/music/edmonton_oilers.mp3",
+  "/scoreboard/music/calgary_flames.mp3",
+  "/scoreboard/music/detroit_red_wings.mp3",
+  "/scoreboard/music/tampa_bay_lightning.mp3",
 ];
 
 interface Props {
-  team: Team;
+  teamColor: TeamColor;
 }
 
-const GoalDialog = ({ team }: Props) => {
-  const [showGoalDialog, setShowGoalDialog] = useState(false);
+// GoalDialog.tsx:31 6
+// GoalDialog.tsx:32 6
+// GoalDialog.tsx:31 10
+// GoalDialog.tsx:32 4
+// GoalDialog.tsx:31 4
+// GoalDialog.tsx:32 5
+// GoalDialog.tsx:31 5
+// GoalDialog.tsx:32 4
+
+const GoalDialog = ({ teamColor }: Props) => {
   const [musicUrl, setMusicUrl] = useState<string>();
 
-  setTimeout(() => {
-    setShowGoalDialog(true);
-  }, 1000);
-
   useEffect(() => {
-    const url = musicUrls[Math.floor(Math.random() * musicUrls.length)];
-    console.log(url);
-    setMusicUrl(url);
+    let abort = false;
+    const lastSampleIndex = localStorage.getItem("lastSampleIndex");
+    const enableMusic = localStorage.getItem("enableSound") === "true";
+    let sampleIndex = Math.floor(Math.random() * musicUrls.length);
+    console.log(lastSampleIndex);
+    console.log(sampleIndex);
+    if (lastSampleIndex) {
+      while (sampleIndex === Number(lastSampleIndex)) {
+        sampleIndex = Math.floor(Math.random() * musicUrls.length);
+      }
+    }
+    const url = musicUrls[sampleIndex];
+
+    if (enableMusic) setMusicUrl(url);
 
     setTimeout(() => {
-      setShowGoalDialog(true);
-    }, 1000);
-  }, []);
+      if (!abort) {
+        localStorage.setItem("lastSampleIndex", String(sampleIndex));
+      }
+    }, 100);
 
-  console.log(team);
+    return () => {
+      abort = true;
+    };
+  }, []);
 
   return (
     <>
       <div
-        className={`${
-          showGoalDialog ? "visible" : "hidden"
-        } h-full w-full absolute z-10 font-extrabold content-center items-center ${
-          team === Team.Right ? "bg-red-600" : "bg-white"
-        } flex justify-around`}
+        className={`absolute h-full w-full z-10 font-extrabold content-center items-center ${teamColor.bg} flex justify-around z-50`}
       >
         <div
-          className={`text-superlg ${
-            team === Team.Right ? "text-white" : "text-black"
-          } goal width-fit-content`}
+          className={`xl:text-[20rem] md:text-[15rem] 2xl:text-supermd text-8xl ${teamColor.text} goal width-fit-content`}
         >
           <span>G</span>
           <span>O</span>
