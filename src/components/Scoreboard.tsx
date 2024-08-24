@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useContext } from "react";
+import { useCallback, useState, useContext } from "react";
 
 import BluetoothControlPanel from "./BluetoothControlPanel";
 import GoalDialog from "./GoalDialog/GoalDialog";
