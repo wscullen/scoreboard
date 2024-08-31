@@ -11,7 +11,6 @@ export interface SettingsPanelProps {
 
 const SettingsPanel = ({
   handleResetScores,
-  handleUpdateScores,
   handleSwapTeams,
 }: SettingsPanelProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
