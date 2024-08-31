@@ -1,11 +1,5 @@
-import {
-  Settings2,
-  Bluetooth,
-  BluetoothConnected,
-  BluetoothOff,
-  BluetoothSearching,
-} from "lucide-react";
-import { useState, useCallback, useMemo, useEffect, useContext } from "react";
+import { Settings2 } from "lucide-react";
+import { useState, useCallback, useEffect, useContext } from "react";
 
 import { SettingsContext } from "./SettingsProvider";
 
@@ -56,20 +50,6 @@ const SettingsPanel = ({
       });
     },
     [settings, updateSettings]
-  );
-
-  const handleIncomingData = useCallback(
-    async (data: string) => {
-      console.log(data);
-      const parsedData = JSON.parse(data);
-      console.log(parsedData);
-      if (parsedData?.reset === "true") {
-        handleResetScores();
-        return;
-      }
-      handleUpdateScores(parsedData?.b, parsedData?.a);
-    },
-    [handleUpdateScores, handleResetScores]
   );
 
   const toggleMenu = () => {
