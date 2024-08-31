@@ -1,6 +1,7 @@
 import { useCallback, useState, useContext } from "react";
 
-import BluetoothControlPanel from "./BluetoothControlPanel";
+import SettingsPanel from "./SettingsPanel";
+import BluetoothSettingsPanel from "./BluetoothSettingsPanel";
 import GoalDialog from "./GoalDialog/GoalDialog";
 import { useKeyDown } from "../hooks/useKeyDown";
 import { Team } from "../utils/enums";
@@ -147,11 +148,17 @@ const ScoreCounter = () => {
 
   return (
     <div className="2xl/main:flex-row flex flex-col grow h-full v-full">
-      <BluetoothControlPanel
-        handleResetScores={resetScores}
-        handleUpdateScores={updateScores}
-        handleSwapTeams={swapTeams}
-      />
+      <div className="fixed top-2 left-2 flex flex-col gap-2 z-50 items-start">
+        <SettingsPanel
+          handleResetScores={resetScores}
+          handleUpdateScores={updateScores}
+          handleSwapTeams={swapTeams}
+        />
+        <BluetoothSettingsPanel
+          handleResetScores={resetScores}
+          handleUpdateScores={updateScores}
+        />
+      </div>
       {goalDialogOpen && (
         <GoalDialog
           teamColor={

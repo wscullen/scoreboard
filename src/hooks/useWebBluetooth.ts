@@ -51,19 +51,33 @@ const useWebBluetooth = (incomingDataEventListener: (data: string) => void) => {
 
   // When the component mounts, check that the browser supports Bluetooth
   useEffect(() => {
-    if (navigator?.bluetooth) {
-      setSupportsBluetooth(true);
+    const getPairedDevices = async () => {
+      const bluetooth = navigator?.bluetooth;
+      console.log(bluetooth);
 
-      const getPairedDevices = async () => {
-        const devices = await navigator.bluetooth.getDevices();
-        setPreviouslyPairedDevices(devices);
-      };
+      try {
+        if (bluetooth) {
+          if (typeof bluetooth.getDevices === "function") {
+            const devices = await navigator?.bluetooth?.getDevices();
+            setPreviouslyPairedDevices(devices);
+          }
+          const bluetoothAvailable =
+            await navigator.bluetooth.getAvailability();
+          setSupportsBluetooth(bluetoothAvailable);
+        }
+      } catch (error) {
+        console.log(`There was an error: ${error}`);
+      }
+    };
 
-      getPairedDevices();
-    }
+    getPairedDevices();
   }, []);
 
   const clearPairedDevices = async () => {
+    if (!navigator.bluetooth?.getDevices) {
+      console.log("Web Bluetooth API is not available");
+      return;
+    }
     const devices = await navigator.bluetooth.getDevices();
     devices.forEach(async (device) => {
       await device.forget();
@@ -71,6 +85,68 @@ const useWebBluetooth = (incomingDataEventListener: (data: string) => void) => {
     setPreviouslyPairedDevices([]);
     setIsDisconnected(true);
   };
+
+  /**
+   * Let the user know when their device has been disconnected.
+   */
+  const onDisconnected = useCallback(() => {
+    console.log("disconnected event recieved");
+    // alert(`The device ${event.target} is disconnected`);
+    setIsDisconnected(true);
+    currentDevice.current = null;
+    currentService.current = null;
+  }, []);
+
+  /**
+   * Update the value shown on the web page when a notification is
+   * received.
+   */
+  const handleCharacteristicValueChanged = useCallback(
+    (event: Event) => {
+      console.log(event);
+      const { value } = event?.target as BluetoothRemoteGATTCharacteristic;
+      incomingDataEventListener(new TextDecoder().decode(value));
+    },
+    [incomingDataEventListener]
+  );
+
+  const connectToExistingDevice = useCallback(
+    async (device: BluetoothDevice) => {
+      try {
+        console.log("trying to connect to existing device", device);
+
+        // Need to do this to prevent Chrome "forgetting" the device and throwing
+        // device out of range error
+        await device?.watchAdvertisements();
+
+        currentDevice.current = device;
+
+        // Add an event listener to detect when a device disconnects
+        device.addEventListener("gattserverdisconnected", onDisconnected);
+
+        // Try to connect to the remote GATT Server running on the Bluetooth device
+        const server = await device?.gatt?.connect();
+
+        // Get the battery service from the Bluetooth device
+        const uartService = await server?.getPrimaryService(uartServiceUUID);
+        const characteristic = await uartService?.getCharacteristic(
+          rxCharacteristic
+        );
+
+        characteristic?.startNotifications();
+
+        // When the battery level changes, call a function
+        characteristic?.addEventListener(
+          "characteristicvaluechanged",
+          handleCharacteristicValueChanged
+        );
+        setIsDisconnected(false);
+      } catch (error: unknown) {
+        console.log(`There was an error: ${error}`);
+      }
+    },
+    [handleCharacteristicValueChanged, onDisconnected]
+  );
 
   useEffect(() => {
     let reconnect: number | NodeJS.Timeout | undefined = undefined;
@@ -91,7 +167,7 @@ const useWebBluetooth = (incomingDataEventListener: (data: string) => void) => {
     return () => {
       if (reconnect !== undefined) clearInterval(reconnect);
     };
-  }, [previouslyPairedDevices, isDisconnected]);
+  }, [previouslyPairedDevices, isDisconnected, connectToExistingDevice]);
 
   //   const connectToBluetoothDevice = useCallback((device: BluetoothDevice) => {
   //     const abortController = new AbortController();
@@ -120,17 +196,6 @@ const useWebBluetooth = (incomingDataEventListener: (data: string) => void) => {
   //     }
   //   }
 
-  /**
-   * Let the user know when their device has been disconnected.
-   */
-  const onDisconnected = useCallback(() => {
-    console.log("disconnected event recieved");
-    // alert(`The device ${event.target} is disconnected`);
-    setIsDisconnected(true);
-    currentDevice.current = null;
-    currentService.current = null;
-  }, []);
-
   //   const getDevices = async () => {
   //     const devices = await navigator.bluetooth.getDevices();
   //     console.log(devices);
@@ -143,15 +208,6 @@ const useWebBluetooth = (incomingDataEventListener: (data: string) => void) => {
   //   const devices = await navigator.bluetooth.watchAdvertisements();
   //   console.log(devices);
   // };
-  /**
-   * Update the value shown on the web page when a notification is
-   * received.
-   */
-  const handleCharacteristicValueChanged = (event: Event) => {
-    console.log(event);
-    const { value } = event?.target as BluetoothRemoteGATTCharacteristic;
-    incomingDataEventListener(new TextDecoder().decode(value));
-  };
 
   const sendData = async (data: string) => {
     try {
@@ -165,40 +221,6 @@ const useWebBluetooth = (incomingDataEventListener: (data: string) => void) => {
     }
   };
 
-  const connectToExistingDevice = async (device: BluetoothDevice) => {
-    try {
-      console.log("trying to connect to existing device", device);
-
-      // Need to do this to prevent Chrome "forgetting" the device and throwing
-      // device out of range error
-      await device?.watchAdvertisements();
-
-      currentDevice.current = device;
-
-      // Add an event listener to detect when a device disconnects
-      device.addEventListener("gattserverdisconnected", onDisconnected);
-
-      // Try to connect to the remote GATT Server running on the Bluetooth device
-      const server = await device?.gatt?.connect();
-
-      // Get the battery service from the Bluetooth device
-      const uartService = await server?.getPrimaryService(uartServiceUUID);
-      const characteristic = await uartService?.getCharacteristic(
-        rxCharacteristic
-      );
-
-      characteristic?.startNotifications();
-
-      // When the battery level changes, call a function
-      characteristic?.addEventListener(
-        "characteristicvaluechanged",
-        handleCharacteristicValueChanged
-      );
-      setIsDisconnected(false);
-    } catch (error: unknown) {
-      console.log(`There was an error: ${error}`);
-    }
-  };
   /**
    * Attempts to connect to a Bluetooth device and subscribe to
    * battery level readings using the battery service.
