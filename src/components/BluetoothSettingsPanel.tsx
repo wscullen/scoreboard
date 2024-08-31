@@ -1,8 +1,6 @@
 import {
-  Settings2,
   Bluetooth,
   BluetoothConnected,
-  BluetoothOff,
   BluetoothSearching,
 } from "lucide-react";
 import { useState, useCallback, useMemo } from "react";
