@@ -147,7 +147,7 @@ const ScoreCounter = () => {
   ]);
 
   return (
-    <div className="2xl/main:flex-row flex flex-col grow h-full v-full">
+    <div className="sm/main:flex-row flex flex-col grow h-full v-full">
       <div className="fixed top-2 left-2 flex flex-col gap-2 z-50 items-start">
         <SettingsPanel
           handleResetScores={resetScores}
@@ -173,7 +173,7 @@ const ScoreCounter = () => {
         <button className="flex items-center z-10" onClick={incrementLeftScore}>
           +
         </button>
-        <div className="text-supersm 2xl:text-supermd flex grow items-center leading-[0.65]">
+        <div className="text-13xl md:text-supersm 2xl:text-supermd flex grow items-center leading-[0.65]">
           {leftScore}
         </div>
         <button className="flex items-center" onClick={decrementLeftScore}>
@@ -189,7 +189,7 @@ const ScoreCounter = () => {
         >
           +
         </button>
-        <div className="text-supersm 2xl:mb-20 2xl:text-supermd flex grow items-center leading-[0.65]">
+        <div className="text-13xl md:text-supersm 2xl:text-supermd flex grow items-center leading-[0.65]">
           {rightScore}
         </div>
         <button
